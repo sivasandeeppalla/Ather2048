@@ -42,11 +42,8 @@ class ViewController: UIViewController {
         flotingLbl.text = "\(viewModel.getCurrentTileNumber())"
         currentTileValue.text = "\(viewModel.getCurrentTileNumber())"
         upcommingtileValue.text = "\(viewModel.getUpCommingTileNumbere())"
-        if let score = UserDefaults.standard.integer(forKey: UserDefaultConstants.highScore) as? Int {
-            highScoreLbl.text = score.description
-        }
-      
         wonTitle.isHidden = true
+        assignHightScore()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -99,6 +96,14 @@ class ViewController: UIViewController {
             flotingLbl.text = "\(viewModel.getCurrentTileNumber())"
             currentTileValue.text = "\(viewModel.getCurrentTileNumber())"
             upcommingtileValue.text = "\(viewModel.getUpCommingTileNumbere())"
+            if !viewModel.checkForAnyPossibleMoves() {
+                let alert = UIAlertController(title: "No More Possible Moves", message: "Game Over", preferredStyle: .alert)
+                let okBtn = UIAlertAction(title: "OK", style: .destructive) { okTap in
+                    self.viewModel.resetGame()
+                }
+                alert.addAction(okBtn)
+                self.present(alert, animated: true, completion: nil)
+            }
         } else {
             debugPrint("No moves left move to another column")
         }
@@ -139,6 +144,12 @@ class ViewController: UIViewController {
     func adjustPostionOfFlotingLabel(_ newFrame: CGRect) {
         UIView.animate(withDuration: 0.4) {
             self.flotingLbl.frame = newFrame
+        }
+    }
+    
+    func assignHightScore() {
+        if let score = UserDefaults.standard.integer(forKey: UserDefaultConstants.highScore) as? Int {
+            highScoreLbl.text = score.description
         }
     }
 }
@@ -186,6 +197,7 @@ extension ViewController: GameViewModelProtocol {
     func gameResetDone() {
         self.gameCollectionView.reloadData()
         wonTitle.isHidden = true
+        assignHightScore()
         currentScoreLbl.text = self.viewModel.getTotalScore().description
     }
 }

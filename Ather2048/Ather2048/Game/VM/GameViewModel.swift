@@ -82,6 +82,13 @@ class GameViewModel: NSObject {
     }
     
     
+    func checkForAnyPossibleMoves() -> Bool {
+        let listofLastAvailableIndexs = gameModels.filter({$0.number == 0})
+        if listofLastAvailableIndexs.count == 0 {
+            return false
+        }
+        return true
+    }
     
     func updateModelsList(_ index: Int, withNumber: Int) {
        let model = gameModels[index]
