@@ -14,7 +14,7 @@ protocol GameViewModelProtocol {
 
 class GameViewModel: NSObject {
     var delegates: GameViewModelProtocol?
-    let numbersList = [2,4,8,16,32,64] // this is the list of random numbers which we are picking to show curernt number and upcomming number.
+    let numbersList = [2,4] //,8,16,32,64 this is the list of random numbers which we are picking to show curernt number and upcomming number.
     private var totalItems = 16 // default.
     private var matrixSize = 4 // default size of matrix is 5*5
     
@@ -206,7 +206,7 @@ class GameViewModel: NSObject {
     }
     
     func genereteRandomNumberFormList() -> Int {
-        let randomIndex = Int.random(in: 0..<6)
+        let randomIndex = Int.random(in: 0..<numbersList.count)
         return numbersList[randomIndex]
     }
     
@@ -324,12 +324,10 @@ extension GameViewModel {
                 let indexPositionInMatrix = CalculateSurrondingIndexes.getPostionForIndex(item.sourrendedPostions.bottomIndex, matrixSize: matrixSize)
                 let result = CalculateSurrondingIndexes.getSurroundedIndexes(item.sourrendedPostions.bottomIndex, matrixSize: matrixSize)
                 let newModel = GameModel(number: newTotalNumber, position:indexPositionInMatrix, sourrendedPostions: result)
-                debugPrint("models before bottom availble \(gameModels) and newModel is \(newModel)")
                 gameModels[item.sourrendedPostions.bottomIndex] = newModel
                 let emptyModel = self.createEmptyModel(item: item)
                 gameModels[index] = emptyModel
                 nextIterationIndex = item.sourrendedPostions.bottomIndex
-                debugPrint("models after bottom availble \(gameModels)")
             } else {
                 let newModel = GameModel(number: newTotalNumber, position: item.position, sourrendedPostions: item.sourrendedPostions)
                 gameModels[index] = newModel
