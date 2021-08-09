@@ -99,7 +99,7 @@ class GameViewModel: NSObject {
     
     
     func checkAndAjustTiles(_ index: Int) {
-     //   let result =  calculateNewModelsWithCalculations(index)
+     // let result =  calculateNewModelsWithCalculations(index)
         let result =  calculateNewModelsWithCalculationsAlteration(index)
         if !result.recursiveNeeded {
             self.delegates?.modelsUpdatedRefreshUI()
@@ -258,7 +258,7 @@ extension GameViewModel {
         var numberInt = [Int]()
         var isbottomAvailable = false
         
-        
+       // numberInt.append(item.number)
         
         if item.sourrendedPostions.topIndex > 0 {
             let model = gameModels[item.sourrendedPostions.topIndex]
@@ -307,9 +307,17 @@ extension GameViewModel {
             }
 
         }
-        debugPrint("num int is \(numberInt) and total is \(numberInt.reduce(0, +))")
-        let newTotalNumber = numberInt.reduce(0, +)  + item.number
-       
+        let totalNumbers = numberInt.count
+        var powerNumber = pow(Decimal(item.number),1)
+        var result = NSDecimalNumber(decimal: powerNumber)
+        var newTotalNumber = Int(truncating: result)
+
+        if totalNumbers > 0 {
+            powerNumber = pow(Decimal(item.number),totalNumbers)
+            result = NSDecimalNumber(decimal: powerNumber)
+            newTotalNumber = Int(truncating: result) * 2
+        }
+        debugPrint("num int is \(numberInt) and total is \(powerNumber)")
         var nextIterationIndex = -1
         if newTotalNumber != item.number {
             totalScore = newTotalNumber + totalScore
